@@ -1,7 +1,7 @@
 
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { GameState, GameRecord, GuessHistory } from './types';
-import { getBestRecord, saveRecord } from './supabaseService';
+import React, { useState, useEffect, useRef } from 'react';
+import { GameState, GameRecord, GuessHistory } from './types.js';
+import { getBestRecord, saveRecord } from './supabaseService.js';
 import { Trophy, Timer, RotateCcw, Send, Play, User, History as HistoryIcon } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -93,8 +93,12 @@ const App: React.FC = () => {
       duration_seconds: duration
     };
 
-    await saveRecord(newRecord);
-    await refreshBestRecord();
+    try {
+      await saveRecord(newRecord);
+      await refreshBestRecord();
+    } catch (err) {
+      console.error("Failed to save record", err);
+    }
   };
 
   const resetGame = () => {
@@ -135,7 +139,7 @@ const App: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <p className="text-indigo-200 italic text-sm">첫 번째 기록을 세워보세요!</p>
+              <p className="text-indigo-200 italic text-sm">기록을 불러오는 중이거나 아직 기록이 없습니다.</p>
             )}
           </div>
         </div>
@@ -260,11 +264,6 @@ const App: React.FC = () => {
           )}
         </div>
       </div>
-      
-      {/* Footer Instructions */}
-      <p className="mt-8 text-slate-400 text-sm max-w-xs text-center">
-        컴퓨터가 생각한 1부터 100 사이의 숫자를 최대한 빠르게, 그리고 최소한의 시도로 맞혀보세요.
-      </p>
     </div>
   );
 };

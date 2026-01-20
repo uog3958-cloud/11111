@@ -1,10 +1,8 @@
 
 import { createClient } from '@supabase/supabase-js';
-import { GameRecord } from './types';
+import { GameRecord } from './types.js';
 
 const SUPABASE_URL = 'https://dqhwdndamxqdsungbgpz.supabase.co';
-// Note: In a production app, the anon key would typically be in an env var.
-// I'm using the placeholder key format usually found in Supabase projects.
 const SUPABASE_ANON_KEY = 'sb_publishable_yOigcFgzmJYPVfaEonP9IA_F4l8iHUr';
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -17,10 +15,9 @@ export const getBestRecord = async (): Promise<GameRecord | null> => {
       .order('attempts', { ascending: true })
       .order('duration_seconds', { ascending: true })
       .limit(1)
-      .single();
+      .maybeSingle(); // maybeSingle handles 0 results gracefully
 
     if (error) {
-      if (error.code === 'PGRST116') return null; // No records found
       console.error('Error fetching best record:', error);
       return null;
     }
