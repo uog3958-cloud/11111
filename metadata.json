@@ -1,0 +1,5 @@
+{
+  "name": "Number Guessing Challenge V2",
+  "description": "A high-stakes number guessing game where users compete for the fastest time and fewest attempts. Includes real-time leaderboards and persistent history.",
+  "requestFramePermissions": []
+}
